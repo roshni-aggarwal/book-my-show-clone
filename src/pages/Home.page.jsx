@@ -1,20 +1,49 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+
 //Components
 import EntertainmentCardSlider from "../components/Entertainment/EntertainmentCard.component";
 import HeroCarousel from "../components/HeroCarousel/HeroCaraousel.component";
 import PosterSlider from "../components/PosterSlider/PosterSlider.component";
 
 //Layout Hoc
-import DefaultLayoutHoc from "../Layout/Default.layout";
+import DefaultLayoutHoc from "../layout/Default.layout";
 
 const Homepage = () => {
   const [recommendedMovies, setRecommendedMovies] = useState([]);
   const [premierMovies, setPremierMovies] = useState([]);
-  const [onlineStremEvents, setOnlineStreamEvents] = useState([]);
+  const [onlineStreamEvents, setOnlineStreamEvents] = useState([]);
+
+  useEffect(() => {
+    const requestPopularMovies = async () => {
+      const getPopularMovies = await axios.get("/movie/popular");
+
+      setRecommendedMovies(getPopularMovies.data.results);
+    };
+    requestPopularMovies();
+  }, []);
+
+  useEffect(() => {
+    const requestTopRatedMovies = async () => {
+      const getTopRatedMovies = await axios.get("/movie/top_rated");
+
+      setPremierMovies(getTopRatedMovies.data.results);
+    };
+    requestTopRatedMovies();
+  }, []);
+
+  useEffect(() => {
+    const requestUpcomingMovies = async () => {
+      const getUpcomingMovies = await axios.get("/movie/upcoming");
+
+      setOnlineStreamEvents(getUpcomingMovies.data.results);
+    };
+    requestUpcomingMovies();
+  }, []);
 
   return (
     <>
-      <HeroCarousel />
+      <HeroCarousel poster={recommendedMovies} />
       <div className="container mx-auto px-4 md:px-12 my-8">
         <h1 className="text-2xl font-bold text-gray-800 sm:ml-3 ml-0 my-3">
           The best of Entertainment
@@ -22,10 +51,10 @@ const Homepage = () => {
         <EntertainmentCardSlider />
       </div>
 
-      <div className="container mx-auto px-4 md:px-12 my-8">
+      <div className="container mx-auto px-20 md:px-12 my-8">
         <PosterSlider
           title="Recommended Movies"
-          subject="List of recommended movies"
+          subtitle="List of recommended movies"
           poster={recommendedMovies}
           isDark={false}
         />
@@ -42,18 +71,18 @@ const Homepage = () => {
           </div>
           <PosterSlider
             title="Premier Movies"
-            subject="Brand new releases every Friday"
+            subtitle="Brand new releases every Friday"
             poster={premierMovies}
             isDark={true}
           />
         </div>
       </div>
 
-      <div className="conatiner mx-auto px-4 md:px-12 my-8">
+      <div className="conatiner mx-auto px-20 md:px-12 my-8">
         <PosterSlider
           title="Online Streaming Event"
-          subject=""
-          poster={setOnlineStreamEvents}
+          subtitle=""
+          poster={onlineStreamEvents}
           isDark={false}
         />
       </div>

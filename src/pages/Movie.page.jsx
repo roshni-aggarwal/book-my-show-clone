@@ -1,10 +1,12 @@
-import React from 'react'
-import MovieLayoutHoc from '../Layout/Movie.layout'
+import React from "react";
+import MovieLayoutHoc from "../layout/Movie.layout";
 
 const Moviepage = () => {
   return (
-    <div>Moviepage</div>
-  )
-}
+    <div>
+      Moviepage
+    </div>
+  );
+};
 
-export default MovieLayoutHoc(Moviepage)
+export default MovieLayoutHoc(Moviepage);
